@@ -1,9 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import pickle
-import pandas as pd
 import numpy as np
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 app = Flask(__name__)
 
@@ -48,7 +45,6 @@ def predict():
             return jsonify({'error': 'No texts provided'}), 400
 
         # Process the texts
-        X_tfidf = tfidf_vectorizer.transform(texts)
         X_word2vec = get_word2vec_embeddings(texts, word2vec_model, 100)
 
         # Make predictions
@@ -66,8 +62,8 @@ def predict():
 # Define route for index page
 @app.route('/')
 def index():
-    return render_template('public/templates/index.html')
+    return render_template('index.html')
 
-# Run the app
+# Run the app with specified port
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
