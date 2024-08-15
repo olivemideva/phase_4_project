@@ -62,7 +62,7 @@ def predict():
 # Define route for index page
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('public/templates/index.html')
 
 # Run the app with specified port
 if __name__ == '__main__':
