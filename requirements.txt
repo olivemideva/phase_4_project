@@ -8,4 +8,4 @@ seaborn
 scikit-learn
 tensorflow
 wordcloud
-Flask-CORS==3.1.0
+Flask-CORS
