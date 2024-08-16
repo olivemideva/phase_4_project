@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import pickle
 import numpy as np
 
@@ -63,7 +64,7 @@ def predict():
 # Define route for index page
 @app.route('/')
 def index():
-    return render_template('public/templates/index.html')
+    return render_template('index.html')  # This assumes index.html is in the templates folder
 
 # Run the app with specified port
 if __name__ == '__main__':
