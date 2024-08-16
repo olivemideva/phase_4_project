@@ -22,7 +22,7 @@ with open(word2vec_model_file, 'rb') as file:
 with open(tfidf_vectorizer_file, 'rb') as file:
     tfidf_vectorizer = pickle.load(file)
 
-# Define function for Word2Vec embeddings
+# Function to compute Word2Vec embeddings
 def get_word2vec_embeddings(texts, model, size):
     embeddings = []
     for text in texts:
@@ -35,37 +35,37 @@ def get_word2vec_embeddings(texts, model, size):
         embeddings.append(mean_vec)
     return np.array(embeddings)
 
-# Define route for prediction
+# Route for the prediction
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get the text from the request
-        data = request.json
-        texts = data.get('texts', [])
+        # Get the text from the form data
+        text = request.form['text']
+        
+        if not text:
+            return jsonify({'error': 'No text provided'}), 400
 
-        if not texts:
-            return jsonify({'error': 'No texts provided'}), 400
-
-        # Process the texts
-        X_word2vec = get_word2vec_embeddings(texts, word2vec_model, 100)
+        # Process the text
+        X_word2vec = get_word2vec_embeddings([text], word2vec_model, 100)
 
         # Make predictions
-        tfidf_predictions = logistic_model.predict(X_word2vec)
+        predictions = logistic_model.predict(X_word2vec)
         
         # Convert predictions to readable labels
         category_labels = {0: 'Politics', 1: 'Technology', 2: 'Entertainment', 3: 'Business'}
-        predictions = [category_labels[pred] for pred in tfidf_predictions]
+        prediction_label = category_labels.get(predictions[0], 'Unknown')
 
-        return jsonify({'predictions': predictions})
+        # Render the template with the prediction result
+        return render_template('public/index.html', prediction=prediction_label)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Define route for index page
+# Route for the index page
 @app.route('/')
 def index():
-    return render_template('public/index.html')  # This assumes index.html is in the templates folder
+    return render_template('public/index.html')  # Ensure index.html is in the correct folder
 
-# Run the app with specified port
+# Run the app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
