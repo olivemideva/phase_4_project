@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 
 app = Flask(__name__)
+CORS(app)
 
 # Paths to models and vectorizers
 MODEL_PATH = './model/'
