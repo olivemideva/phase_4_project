@@ -115,21 +115,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#predict-form').on('submit', function(event) {
-                event.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    url: '/predict',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        $('#result').text('Predicted Category: ' + response.prediction).show();
-                    },
-                    error: function() {
-                        $('#result').text('An error occurred. Please try again.').show();
-                    }
-                });
+        document.getElementById('newsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const content = document.getElementById('newsContent').value;
+
+            fetch('https://backend-news-app.onrender.com/categorize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content: content }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Category: ' + data.category;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
         });
     </script>
