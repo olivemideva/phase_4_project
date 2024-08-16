@@ -122,6 +122,8 @@ The confusion matrix revealed that while the model was generally effective, it s
 ## Deployment 
 
 The deployment in this project involved saving the trained Multinomial Naive Bayes and Logistic Regression models, along with the TF-IDF vectorizer and Word2Vec model, using `pickle`. For prediction on new, unseen data, these models and vectorizers were loaded back. The test data was transformed using the TF-IDF vectorizer and Word2Vec embeddings. The loaded models were then used to make predictions on the transformed data. Finally, the predictions were saved to CSV files for further analysis or use. This process allows the trained models to be easily applied to new data, enabling real-world deployment.
+[News Categorization Site](https://backend-news-app.onrender.com)
+
 
 ![image](https://github.com/olivemideva/phase_4_project/blob/main/images/deployment1.png).
 
