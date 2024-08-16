@@ -85,7 +85,7 @@
             background-color: rgba(0, 0, 0, 0.6);
             padding: 1rem;
             border-radius: 30px;
-            display: none; 
+            display: {{ 'block' if prediction else 'none' }}; 
         }
     </style>
 </head>
@@ -98,13 +98,17 @@
             <div class="starter-template">
                 <h1>News Article Categorization</h1>
                 <p class="lead">Enter your news article text below to predict its category.</p>
-                <form id="predict-form">
+                <form id="predict-form" method="POST" action="{{ url_for('predict') }}">
                     <div class="form-group">
-                        <textarea name="text" class="form-control" rows="10" placeholder="Enter news article text here..."></textarea>
+                        <textarea id="newsText" name="text" class="form-control" rows="10" placeholder="Enter news article text here..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Predict</button>
                 </form>
-                <div id="result" class="result"></div>
+                {% if prediction %}
+                <div id="result" class="result">
+                    <p>{{ prediction }}</p>
+                </div>
+                {% endif %}
             </div>
         </main>
         <footer>
@@ -114,21 +118,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <script>
-        async function predictCategory() {
-            const text = document.getElementById('newsText').value;
-            const response = await fetch('https://backend-news-app.onrender.com/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ texts: [text] })
-            });
-            
-            const result = await response.json();
-            document.getElementById('result').innerText = result.predictions ? `Category: ${result.predictions[0]}` : 'Error: ' + result.error;
-        }
-    </script>
 </body>
 </html>
