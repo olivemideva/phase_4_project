@@ -114,26 +114,21 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
     <script>
-        document.getElementById('newsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const content = document.getElementById('newsContent').value;
-
-            fetch('https://backend-news-app.onrender.com/categorize', {
+        async function predictCategory() {
+            const text = document.getElementById('newsText').value;
+            const response = await fetch('https://backend-news-app.onrender.com/predict', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ content: content }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerText = 'Category: ' + data.category;
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+                body: JSON.stringify({ texts: [text] })
             });
-        });
+            
+            const result = await response.json();
+            document.getElementById('result').innerText = result.predictions ? `Category: ${result.predictions[0]}` : 'Error: ' + result.error;
+        }
     </script>
 </body>
 </html>
